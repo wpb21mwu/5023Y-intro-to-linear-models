@@ -68,6 +68,13 @@ means %>%
     ymax=upper.CL))
 
 # Assumption Checking----
+#In this first part we are going to check two of our assumptions:
+
+# 1. that the residual/unexplained variance in our data is approximately normally distributed.
+
+# 2. that the residual/unexplained variance is approximately equal between our groups
+
+# Residuals are the differences between the observed values and the fitted values produced by the model - in this case the heights of the plants against the treatment means. The assumption of a normal distribution applies because the linear model uses this to calculate the standard errors (and therefore confidence intervals).
 
 performance::check_model(lsmodel1) # Base R 
 plot(lsmodel1) # tidyverse 
