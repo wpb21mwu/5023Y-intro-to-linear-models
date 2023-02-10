@@ -55,4 +55,42 @@ GGally::ggcoef_model(lsmodel1,
 
 broom::tidy(lsmodel1, conf.int=T, conf.level=0.99)
 
+means <- emmeans::emmeans(lsmodel1, specs = ~ type)
 
+means
+
+means %>% 
+  as_tibble() %>% 
+  ggplot(aes(x=type, 
+             y=emmean))+
+  geom_pointrange(aes(
+    ymin=lower.CL, 
+    ymax=upper.CL))
+
+# Assumption Checking----
+
+performance::check_model(lsmodel1) # Base R 
+plot(lsmodel1) # tidyverse 
+
+# Normal Distribution----
+performance::check_model(lsmodel1, check=c("normality","qq"))
+plot(lsmodel1, which=c(2,2))
+
+#Equal Variance----
+performance::check_model(lsmodel1, check="homogeneity")
+plot(lsmodel1, which=c(1,3))
+
+#Outliers----
+performance::check_model(lsmodel1, check="outliers")
+plot(lsmodel1, which=c(4,4))
+
+# Summary----
+darwin %>% 
+  ggplot(aes(x=type, 
+             y=height))+
+  geom_jitter(width=0.1, 
+              pch=21, 
+              aes(fill=type))+
+  theme_classic()+
+  geom_segment(aes(x=1, xend=2, y=20.192, yend=20.192-2.617), linetype="dashed")+
+  stat_summary(fun.y=mean, geom="crossbar", width=0.2)
