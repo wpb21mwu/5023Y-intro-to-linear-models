@@ -22,6 +22,21 @@ lsmodel1 <- lm(height ~ type, data=darwin)
 
 # lsmodel1 <- lm(height ~ 1 + type, data=darwin)
 
-broom::tidy(lsmodel1) # summerise key info about the information
+broom::tidy(lsmodel1) # summerise key info about the information, top line is the first variables mean the typeself line is the difference between the two means 
 
+darwin %>% 
+  group_by(type) %>% 
+  summarise(mean=mean(height))
+
+summary(lsmodel1) # tells us degrees of freedom and the proportion of variance explained by the model. 
+
+darwin %>% 
+  ggplot(aes(x=type, 
+             y=height,
+             colour=type))+
+  geom_jitter(alpha=0.5,
+              width=0.1)+
+  stat_summary(fun=mean,
+               size=1.2)+
+  theme_bw()
 
