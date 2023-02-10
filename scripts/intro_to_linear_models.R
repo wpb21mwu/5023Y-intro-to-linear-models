@@ -5,6 +5,7 @@ library(tidyverse)
 library(GGally)
 library(emmeans)
 library(performance)
+library(broom.helpers)
 
 # Lm function---- 
 lsmodel0 <- lm(formula = height ~ 1, data = darwin)
@@ -39,4 +40,19 @@ darwin %>%
   stat_summary(fun=mean,
                size=1.2)+
   theme_bw()
+
+# Confidence Intervals----
+
+confint(lsmodel1) # Base R for calculating confidence intervals
+broom::tidy(lsmodel1, conf.int=T) # Tidyverse for calculating confidence intervals
+
+#Answering Questions----
+
+GGally::ggcoef_model(lsmodel1,
+                     show_p_values=FALSE, 
+                     conf.level=0.95) # produces a graph of the estimated mean difference with an approx 95% CI. 
+ #As we can see we are able to reject the null hypothesis at a 95% confidence level.
+
+broom::tidy(lsmodel1, conf.int=T, conf.level=0.99)
+
 
