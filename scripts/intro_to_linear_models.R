@@ -14,6 +14,7 @@ summary(lsmodel0)
 broom::tidy(lsmodel0) # Both these lines of code do the same thing one uses tidyverse the other uses base R
 
 mean(darwin$height) # Selects just the mean
+####_______________----
 
 # Comparing Means----
 
@@ -40,11 +41,12 @@ darwin %>%
   stat_summary(fun=mean,
                size=1.2)+
   theme_bw()
-
+####___________________----
 # Confidence Intervals----
 
 confint(lsmodel1) # Base R for calculating confidence intervals
 broom::tidy(lsmodel1, conf.int=T) # Tidyverse for calculating confidence intervals
+####______________----
 
 #Answering Questions----
 
@@ -66,6 +68,7 @@ means %>%
   geom_pointrange(aes(
     ymin=lower.CL, 
     ymax=upper.CL))
+####___________________----
 
 # Assumption Checking----
 #In this first part we are going to check two of our assumptions:

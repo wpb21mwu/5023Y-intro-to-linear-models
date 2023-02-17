@@ -7,7 +7,7 @@ library(kableExtra)
 
 darwin <- read_csv(here("data", "darwin.csv")) # imports the data from the data folder onto the console.
 
-####___________
+####___________ ----
 #Standard Checks----
 
 # check the structure of the data
@@ -51,14 +51,14 @@ darwin %>%
 
 summary(darwin)
 
-####__________________
+####__________________----
 # Making a plot using the darin data----
 darwin %>% 
   ggplot(aes(x=type,
              y=height))+
   geom_point()
 
-####_________________
+####_________________----
 #Comparing Groups----
 #Summerising the data
 
@@ -85,7 +85,7 @@ darwin_summary %>%
   kbl(caption="Summary statistics of crossed and selfed maize plants") %>% 
   kable_styling(bootstrap_options = "striped", full_width = T, position = "left") # makes the data able to be viewed in the viewer tab of the workspace
 
-####____________
+####____________----
 #Differences----
 
 # pivot data to wide format then subtract Selfed plant heights from Crossed plant heights
@@ -104,7 +104,7 @@ difference_summary # mean difference in SD of paired plants
 difference_summary %>% 
   mutate(se= sd/sqrt(n)) # calculates the SE of the group sample 
 
-####_______________
+####_______________----
 #Uncertainty levels and Certain Limit Theorem ----
 
 #Null hypothesis - there is no difference in the mean height of self vs crossed plants
