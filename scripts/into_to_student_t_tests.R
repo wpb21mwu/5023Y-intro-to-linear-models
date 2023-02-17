@@ -88,3 +88,69 @@ darwin %>%
 lm(height ~ type + factor(pair), data = darwin) %>% 
   broom::tidy(., conf.int=T) %>% 
   slice(1:2) # just show first two rows
+
+m1 <- lm(height ~ type, data = darwin) %>% 
+  broom::tidy(., conf.int=T) %>% 
+  slice(2:2) %>% 
+  mutate(model="unpaired")
+
+m2 <- lm(height ~ type + factor(pair), data = darwin) %>% 
+  broom::tidy(., conf.int=T) %>% 
+  slice(2:2) %>% 
+  mutate(model="paired")
+
+rbind(m1,m2) %>% 
+  ggplot(aes(model, estimate))+
+  geom_pointrange(aes(ymin=conf.high, ymax=conf.low))+
+  geom_hline(aes(yintercept=0), linetype="dashed")+
+  theme_minimal()+
+  coord_flip()
+# This compares unpaired and paired models to see the difference in means with a 95% confidence interval. 
+####______________----
+
+# Effective Sizes----
+
+# When our 95% confidence intervals do not overlap the intercept, this indicates we have difference in our means which is significant at α= 0.05. 
+# The lower margin of our confidence intervals is the smallest/minimum effect size.
+####______________----
+
+# Type 1 and Type 2 errors----
+# Type 1 error- The reality is that we know if we set an α = 0.05, that we run the risk of rejecting the null hypothesis incorrectly in 1 in 20 of our experiments
+# Type 2 error- 
+####_______________----
+
+# Repeatability----
+
+set.seed(1234)
+
+myList <- vector("list", 20)
+y <- tibble()
+
+for (i in 1:length(myList)) { 
+  
+  x <-  rnorm(n=12, mean=2.6, sd=2.83)
+  data <- tibble(x)
+  temp <- lm(x~1, data=data) %>% 
+    broom::tidy(conf.int=T) 
+  y <- rbind(y,temp)  
+  
+}
+
+y$`experiment number` <- rep(1:20)
+
+# the new dataframe y contains the results of 20 new experiments
+
+# Activity 1----
+y %>% 
+  mutate(`p value < 0.05` = if_else(p.value > 0.049, "non-significant", "significant")) %>% 
+  group_by(`p value < 0.05`) %>% 
+  summarise(`number of experiments`=n())
+
+y %>% 
+  ggplot(aes(x=`experiment number`, y=estimate))+
+  geom_pointrange(aes(ymin = conf.low, ymax=conf.high))+
+  labs(y = "Estimated mean effect of outcrossing")+
+  geom_hline(linetype="dashed", yintercept=0.05)+
+  theme_minimal()# produces a plot that shows estimated mean of outcrossing against the expected number. 
+
+
