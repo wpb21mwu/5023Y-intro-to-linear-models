@@ -131,8 +131,4 @@ upperCI <- 2.62+(2*1.22)
 lowerCI
 upperCI
 
-# Lesson 3----
-
-
-
 
