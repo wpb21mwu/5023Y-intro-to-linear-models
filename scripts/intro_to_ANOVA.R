@@ -34,4 +34,11 @@ pf(5.9395, 1, 28, lower.tail=FALSE)
 # Two Way ANOVA----
 
 lsmodel2 <- lm(height ~ type + as.factor(pair), data = darwin)
+anova(lsmodel2)
+#_________________----
+
+#Summary----
+#ANOVA tables can be built for any linear model. The tables partition the variance into signal(s) and noise, which can be compared using an F-test. For complex analyses where many pairwise comparisons could be performed, an initial F-test can provide the initial evidence for whether there are any differences at all, reducing the risk of overtesting and the false positives that can be generated.
+#_________________----
+
 
