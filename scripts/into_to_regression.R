@@ -106,9 +106,56 @@ p3 <- augmented_ls1 %>%
 library(patchwork)
 p1+p2+p3
 
+model_plot <- function(data=augmented_ls1, 
+                       x="dens", 
+                       y="hardness", 
+                       title="Full data"){
+  ggplot(aes(x=.data[[x]], 
+             y=.data[[y]]), 
+         data=data)+
+    geom_line()+
+    theme_bw()+
+    ggtitle(title)
+}
 
+p1 <- model_plot()
+p2 <- model_plot(y=".fitted", title="Linear prediction")
+p3 <- model_plot(y=".resid", title="Remaining pattern")
 
+#Normal Distributions
 
+performance::check_model(janka_ls1, check=c("normality","qq"))
 
+#Equal Variance
 
+performance::check_model(janka_ls1, check="homogeneity") #This graph shows the standardised residuals which are the raw residuals divided by the standard deviation. 
+
+#Outliers
+performance::check_model(janka_ls1, check="outliers") # Shows the outliers, they are all the points outside the dotted lines. 
+#______________________----
+
+#Predictions----
+# Using the coefficients of the intercept and the slope we can make predictions on new data.
+coef(janka_ls1)
+
+# Now imagine we have a new wood samples with a density of 65, how can we use the equation for a linear regression to predict what the timber hardness for this wood sample should be?
+# a + bx
+
+-1160.49970 + 57.50667 * 65
+
+coef(janka_ls1)[1] + coef(janka_ls1)[2] * 65
+
+broom::augment(janka_ls1, 
+               newdata=tibble(dens=c(22,35,65)))
+
+#Adding Confidence intervals
+
+broom::augment(janka_ls1, newdata = tibble(dens=c(22,35,65)), se=TRUE)
+
+broom::augment(janka_ls1, newdata=tibble(dens=c(22,35,65)), interval="confidence")
+
+#emmeans 
+emmeans::emmeans(janka_ls1, 
+specs = "dens", 
+at = list(dens = c(22, 35, 65)))
 
