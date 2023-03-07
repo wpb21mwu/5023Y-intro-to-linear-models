@@ -159,3 +159,18 @@ emmeans::emmeans(janka_ls1,
 specs = "dens", 
 at = list(dens = c(22, 35, 65)))
 
+#__________________----
+#Prediction Activity----
+
+pred_newdata <- broom::augment(janka_ls1, 
+                               newdata=tibble(dens=c(22,35,65)))
+
+janka %>% 
+  ggplot(aes(x=dens, y=hardness))+
+  geom_point()+
+  geom_smooth(method="lm")+
+  geom_point(data=pred_newdata, aes(y=.fitted, x=dens), colour="red")+
+  geom_label(data=pred_newdata, (aes(y=(.fitted+10), x=(dens+3), label=round(.fitted, digits=0))))+
+  theme_bw()+
+  labs(x="Density", y="Timber Hardness")+
+  scale_x_continuous(limits=c(20,80), expand=expansion(add=c(0,5)))
