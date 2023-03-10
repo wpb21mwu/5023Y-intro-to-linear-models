@@ -100,4 +100,36 @@ drop1(ls_3, test = "F") #  include reports of the main effect then estimates and
 
 #In an unbalanced design when you run the anova() function on your model, the order in which your variables were included can have an effect e.g. lm(Fert + Light) would give a different anova table to lm(Light + Fert). 
 
+# make three vectors and combine them into a new tibble
+
+height <- c(50,57,91,94,102,110,57,71,85,105,120)
+size <- c(rep("small", 2), rep("large", 4), rep("small", 3), rep("large", 2))
+treatment <- c(rep("Control", 6), rep("Removal", 5))
+
+unbalanced <- tibble(height, size, treatment)
+
+unbalanced
+
+
+model_1 <- lm(height ~ treatment + size, data = unbalanced)
+anova(model_1)
+
+model_2 <- lm(height ~ size + treatment, data = unbalanced)
+anova(model_2)
+#Produce a linear model testing size and treatment against height. Try making two models swapping the order for including the two predictors and compare them with anova()
+
+drop1(model_1)
+drop1(model_2)
+#Because the drop1 function drops one term from the model, then adds it back in and drops a new one it doesn't matter what order they were included. As a result the values are all the same are just presented in in the reverse. 
+#_________________----
+
+#Post-Hoc----
+
+emmeans::emmeans(ls_2, specs = pairwise ~ Light + Fert + Light:Fert) %>% 
+  confint()
+# including the argument pairwise in front of the ~ prompts the post-hoc pairwise comparisons.
+# $emmeans contains the estimate mean values for each possible combination (with confidence intervals)
+# $ contrasts contains tukey test post hoc comparisons between levels
+#_________________----
+
 
